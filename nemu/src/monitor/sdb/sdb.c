@@ -55,6 +55,7 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 static int cmd_si(char *args);
+static int cmd_info(char *args);
 
 static struct {
   const char *name;
@@ -65,6 +66,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si","si [n]: run n steps,n is optional,if not given,run 1 step", cmd_si},
+  { "info","info [char]: if char is r,print regs,else print watchpoints", cmd_info},
 
   /* TODO: Add more commands */
 
@@ -102,6 +104,16 @@ static int cmd_si(char *args){
   else 
   sscanf(args,"%d",&step);
   cpu_exec(step);
+  return 0;
+}
+
+static int cmd_info(char *args){
+  if(args == NULL)
+    printf("please print args\n");
+  else if(strcmp(args, "r") == 0)
+    isa_reg_display();
+// else if(strcmp(args, "w") == 0)
+//   sdb_watchpoint_display();
   return 0;
 }
 
