@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <memory/paddr.h>
 
 static int is_batch_mode = false;
 
@@ -56,6 +57,7 @@ static int cmd_q(char *args) {
 static int cmd_help(char *args);
 static int cmd_si(char *args);
 static int cmd_info(char *args);
+static int cmd_x(char *args);
 
 static struct {
   const char *name;
@@ -67,6 +69,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si","si [n]: run n steps,n is optional,if not given,run 1 step", cmd_si},
   { "info","info [char]: if char is r,print regs,else print watchpoints", cmd_info},
+  { "x","x [n] [addr]:print n * 4 Bytes datas from addr(hex) in pmem",cmd_x}, 
 
   /* TODO: Add more commands */
 
@@ -116,6 +119,21 @@ static int cmd_info(char *args){
 //   sdb_watchpoint_display();
   return 0;
 }
+
+static int cmd_x(char *args){
+  char *n = strtok(args," ");
+  char *baseaddr = strtok(NULL," ");
+  int len = 0;
+  paddr_t addr = 0;
+  sscanf(n, "%d" ,&len);
+  sscanf(baseaddr,"%x", &addr);
+  for(int i = 0; i < len ; i ++)
+  {
+    printf("%x\n",paddr_read(addr,4));
+    addr = addr + 4;
+  }
+  return 0;
+ }
 
 void sdb_set_batch_mode() {
   is_batch_mode = true;
