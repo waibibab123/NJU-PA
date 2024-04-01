@@ -260,7 +260,7 @@ uint32_t eval(int p,int q){
     bool flag = false;
     for(int i = p; i <= q;i ++)
     {
-      if(tokens[i].type != '(')
+      if(tokens[i].type == '(')
       {
         while(tokens[i].type != ')')
           i ++;
