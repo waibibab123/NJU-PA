@@ -58,6 +58,7 @@ static int cmd_help(char *args);
 static int cmd_si(char *args);
 static int cmd_info(char *args);
 static int cmd_x(char *args);
+static int cmd_p(char *args);
 
 static struct {
   const char *name;
@@ -70,6 +71,7 @@ static struct {
   { "si","si [n]: run n steps,n is optional,if not given,run 1 step", cmd_si},
   { "info","info [char]: if char is r,print regs,else print watchpoints", cmd_info},
   { "x","x [n] [addr]:print n * 4 Bytes datas from addr(hex) in pmem",cmd_x}, 
+  { "p","p [exp]:calculate the value of [exp] and print it",cmd_p},
 
   /* TODO: Add more commands */
 
@@ -134,6 +136,18 @@ static int cmd_x(char *args){
   }
   return 0;
  }
+
+ static int cmd_p(char *args){
+  if(args == NULL)
+  {
+    printf("No args\n");
+    return 0;
+  }
+  bool flag = false;
+  int res = expr(args, &flag);
+  printf("the value is %d\n",res);
+  return 0; 
+}
 
 void sdb_set_batch_mode() {
   is_batch_mode = true;

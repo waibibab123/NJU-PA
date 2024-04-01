@@ -15,6 +15,7 @@
 
 #include <isa.h>
 #include <math.h>
+#include <stdlib.h>
 
 
 /* We use the POSIX regex functions to process regular expressions.
@@ -330,7 +331,93 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
-
-  return 0;
+  
+  //get length
+  int tokens_len = 0;
+  for(int i = 0;i < 30;i ++)
+  {
+    if(tokens[i].type == 0)
+      break;
+    tokens_len ++;
+  }
+  //init the tokens regex
+  for(int i = 0;i < tokens_len; i ++)
+  {
+    if(tokens[i].type == 2)
+    {
+      bool flag = true;
+      int tmp = isa_reg_str2val(tokens[i].str, &flag);
+      if(flag){
+        sprintf(tokens[i].str,"%d",tmp);
+      }else{
+      printf("Transform error\n");
+      assert(0);
+      }
+    }
+  }
+  //init HEX
+  for(int i = 0;i < tokens_len; i++)
+  {
+    if(tokens[i].type == 3)
+    {
+      int value = strtol(tokens[i].str, NULL,16);
+      sprintf(tokens[i].str,"%d",value); 
+    }
+  }
+  //init '-'
+  for(int i = 0;i < tokens_len; i ++)
+  {
+    if((tokens[i].type == '-' && i > 0 &&tokens[i-1].type != NUM && tokens[i+1].type == NUM)
+    ||
+    (tokens[i].type == '-' && i == 0)) 
+    
+  {
+    tokens[i].type = TK_NOTYPE;
+    for(int j = 31;j >= 0;j --)
+    {
+      tokens[i+1].str[j] = tokens[i+1].str[j-1];
+    }
+    tokens[i+1].str[0] = '-';
+    for(int j = 0;j < tokens_len; j ++){ 
+    if(tokens[j].type == TK_NOTYPE)
+    {
+      for(int k = j+1; k < tokens_len;k ++){
+        tokens[k - 1] = tokens[k];
+      }
+      tokens_len --;
+    }
+  }
+  }
+  }
+  //init '!'
+  for(int i = 0;i < tokens_len; i ++)
+  {
+    if(tokens[i].type == '!')
+    {
+      tokens[i].type = TK_NOTYPE;
+      int tmp = atoi(tokens[i+1].str);
+      if(tmp == 0){
+        memset(tokens[i+1].str, 0 ,sizeof tokens[i+1].str);
+        tokens[i+1].str[0] = '1';
+      }
+      else {
+        memset(tokens[i+1].str, 0 ,sizeof tokens[i+1].str);
+      }
+      for(int j = 0; j < tokens_len ;j ++){
+      if(tokens[j].type == TK_NOTYPE)
+      {
+        for(int k = j + 1;k < tokens_len ; k ++){
+          tokens[k - 1] = tokens[k];
+        }
+        tokens_len --;
+      }
+      }
+    }
+  }
+  //true cal
+  uint32_t res = 0;
+  res = eval(0,tokens_len - 1);
+  memset(tokens, 0 ,sizeof tokens);
+  
+  return res; 
 }
