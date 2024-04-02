@@ -63,6 +63,7 @@ void gen_num(){
 }
 
 void gen(char c){
+  if(buf[index_buf-1] == '('||buf[index_buf-1] == ')')return;
   if(index_buf > 655)return;
   buf[index_buf ++] = c;
 }
