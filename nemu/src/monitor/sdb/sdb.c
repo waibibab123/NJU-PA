@@ -152,6 +152,7 @@ static int cmd_x(char *args){
 }
 
 static int cmd_test(char *args){
+  int right_ans = 0;
   FILE *input_file = fopen("/home/dmz/ics2023/nemu/tools/gen-expr/input", "r");
     if (input_file == NULL) {
         perror("Error opening input file");
@@ -186,9 +187,13 @@ static int cmd_test(char *args){
         }
 
         // 输出结果
-        printf("Real Value: %d, Expression: %s\n", real_val, buf);
-    }
+        //printf("Real Value: %d, Expression: %s\n", real_val, buf);
+        bool flag = false;
+        int res = expr(buf,&flag);
+        if(res == real_val)right_ans ++;
 
+    }
+    printf("test 100 expressions,the accuracy is %d/100\n",right_ans);
     fclose(input_file);
     return 0;
 }
