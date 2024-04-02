@@ -187,7 +187,7 @@ static int cmd_test(char *args){
         }
 
         // 输出结果
-        //printf("Real Value: %d, Expression: %s\n", real_val, buf);
+        printf("Real Value: %d, Expression: %s\n", real_val, buf);
         bool flag = false;
         int res = expr(buf,&flag);
         if(res == real_val)right_ans ++;
