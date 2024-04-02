@@ -21,8 +21,8 @@
 #include <string.h>
 
 // this should be enough
-static char buf[65536] = {};
-static char code_buf[65536 + 128] = {}; // a little larger than `buf`
+static char buf[660] = {};
+static char code_buf[660 + 128] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
@@ -39,6 +39,7 @@ int choose(int n){
 }
 
 void gen_num(){
+  if(index_buf > 655)return;
   int num = rand() % 100;
   int num_size = 0,num_tmp= num;
   while(num_tmp){
@@ -62,10 +63,12 @@ void gen_num(){
 }
 
 void gen(char c){
+  if(index_buf > 655)return;
   buf[index_buf ++] = c;
 }
 
 void gen_rand_op(){
+  if(index_buf > 655)return;
   char op[4] = {'+', '-' ,'*','/'};
   int op_position = rand() % 4;
   buf[index_buf ++] = op[op_position];
@@ -73,9 +76,10 @@ void gen_rand_op(){
 
 static void gen_rand_expr(){
 //  buf[0] = '\0' ;
-  if(index_buf > 65530)
-    printf("overSize\n");
-  else
+  if(index_buf > 655){
+//    printf("overSize\n");
+    index_buf = 0;}
+  
   switch(choose(3)){
     case 0:
       gen_num();
@@ -115,7 +119,7 @@ int main(int argc, char *argv[]) {
     fclose(fp);
 
     int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
-    if (ret != 0) continue;
+    if (ret != 0){index_buf = 0;i--; continue;}
 
     fp = popen("/tmp/.expr", "r");
     assert(fp != NULL);
