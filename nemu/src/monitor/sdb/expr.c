@@ -350,7 +350,7 @@ word_t expr(char *e, bool *success) {
   
   //get length
   int tokens_len = 0;
-  for(int i = 0;i < 30;i ++)
+  for(int i = 0;i < 670;i ++)
   {
     if(tokens[i].type == 0)
       break;
