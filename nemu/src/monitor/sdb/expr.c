@@ -112,8 +112,8 @@ static bool  check_parentheses(int p,int q){
   int i = p;
   int j = q;
   while(i < j){
-    if(tokens[p].type == '('){
-      if(tokens[q].type == ')')
+    if(tokens[i].type == '('){
+      if(tokens[j].type == ')')
       {
         i ++;
         j --;
@@ -121,7 +121,7 @@ static bool  check_parentheses(int p,int q){
       else 
         j --;
     }
-    else if(tokens[p].type == ')')return false;
+    else if(tokens[i].type == ')')return false;
     else i ++;
   }
   return true;
