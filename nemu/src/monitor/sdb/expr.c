@@ -260,7 +260,7 @@ uint32_t eval(int p,int q){
   }
   else{
     int op = -1;
-    bool flag = false;
+    int flag = -1 ;
     for(int i = p; i <= q;i ++)
     {
       if(tokens[i].type == '(')
@@ -269,32 +269,36 @@ uint32_t eval(int p,int q){
           i ++;
       }
       
-      if(!flag && tokens[i].type == 6){
-        flag = true;
+      if(flag<7 && tokens[i].type == 6){
+        flag = 7;
         op = max(op,i);
       }
-      if(!flag && tokens[i].type == 7){
-        flag = true;
+      if(flag<6 && tokens[i].type == 7){
+        flag = 6;
         op = max(op,i);
       }
-      if(!flag && tokens[i].type == 5){
-        flag = true;
+      if(flag<5 && tokens[i].type == 5){
+        flag = 5;
         op = max(op,i);
       }
-      if(!flag && tokens[i].type == 4){
-        flag = true;
+      if(flag<4 && tokens[i].type == 4){
+        flag = 4;
         op = max(op,i);
       }
-      if(!flag && tokens[i].type == 10){
-        flag = true;
+      if(flag<3 && tokens[i].type == 10){
+        flag = 3;
         op = max(op,i);
       }
-      if(!flag && (tokens[i].type == '+' || tokens[i].type == '-')){
-        flag = true;
+      if(flag<2 && (tokens[i].type == '+' || tokens[i].type == '-')){
+        flag = 2;
         op = max(op,i);
       }
-      if(!flag && (tokens[i].type == '*' || tokens[i].type == '/')){
-        flag =true;
+      if(flag<1 && tokens[i].type == '*' ){
+        flag =1;
+        op = max(op,i);
+      }
+      if(flag<0 && tokens[i].type == '/' ){
+        flag = 0;
         op = max(op,i);
       }
     }
