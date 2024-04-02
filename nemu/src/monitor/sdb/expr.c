@@ -266,8 +266,13 @@ uint32_t eval(int p,int q){
     {
       if(tokens[i].type == '(')
       {
-        while(tokens[i].type != ')')
+        int cnt = 1;
+        while(cnt != 0)
+        {
           i ++;
+          if(tokens[i].type == '(')cnt ++;
+          else if(tokens[i].type == ')')cnt--;
+        }
       }
       
       if(flag<=7 && tokens[i].type == 6){
