@@ -246,6 +246,7 @@ static bool make_token(char *e) {
 
 uint32_t eval(int p,int q){
   if(p > q){
+    printf("%d %d\n",p,q);
     assert(0);
     return -1;
   }
