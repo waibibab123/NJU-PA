@@ -269,35 +269,35 @@ uint32_t eval(int p,int q){
           i ++;
       }
       
-      if(flag<7 && tokens[i].type == 6){
+      if(flag<=7 && tokens[i].type == 6){
         flag = 7;
         op = max(op,i);
       }
-      if(flag<6 && tokens[i].type == 7){
+      if(flag<=6 && tokens[i].type == 7){
         flag = 6;
         op = max(op,i);
       }
-      if(flag<5 && tokens[i].type == 5){
+      if(flag<=5 && tokens[i].type == 5){
         flag = 5;
         op = max(op,i);
       }
-      if(flag<4 && tokens[i].type == 4){
+      if(flag<=4 && tokens[i].type == 4){
         flag = 4;
         op = max(op,i);
       }
-      if(flag<3 && tokens[i].type == 10){
+      if(flag<=3 && tokens[i].type == 10){
         flag = 3;
         op = max(op,i);
       }
-      if(flag<2 && (tokens[i].type == '+' || tokens[i].type == '-')){
+      if(flag<=2 && (tokens[i].type == '+' || tokens[i].type == '-')){
         flag = 2;
         op = max(op,i);
       }
-      if(flag<1 && tokens[i].type == '*' ){
+      if(flag<=1 && tokens[i].type == '*' ){
         flag =1;
         op = max(op,i);
       }
-      if(flag<0 && tokens[i].type == '/' ){
+      if(flag<=0 && tokens[i].type == '/' ){
         flag = 0;
         op = max(op,i);
       }
