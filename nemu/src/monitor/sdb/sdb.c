@@ -152,7 +152,7 @@ static int cmd_x(char *args){
 }
 
 static int cmd_test(char *args){
-  FILE *input_file = fopen("../../../tools/gen-expr/input", "r");
+  FILE *input_file = fopen("~/ics2023/nemu/tools/gen-expr/input", "r");
     if (input_file == NULL) {
         perror("Error opening input file");
         return 1;
