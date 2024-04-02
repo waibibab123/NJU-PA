@@ -265,6 +265,7 @@ uint32_t eval(int p,int q){
         while(tokens[i].type != ')')
           i ++;
       }
+      
       if(!flag && tokens[i].type == 6){
         flag = true;
         op = max(op,i);
