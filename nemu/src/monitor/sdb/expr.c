@@ -118,6 +118,7 @@ static bool  check_parentheses(int p,int q){
         i ++;
         j --;
       }
+      else if(tokens[j].type == '(')return false;
       else 
         j --;
     }
