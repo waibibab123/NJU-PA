@@ -59,6 +59,7 @@ static int cmd_si(char *args);
 static int cmd_info(char *args);
 static int cmd_x(char *args);
 static int cmd_p(char *args);
+static int cmd_test(char *args);
 
 static struct {
   const char *name;
@@ -72,6 +73,7 @@ static struct {
   { "info","info [char]: if char is r,print regs,else print watchpoints", cmd_info},
   { "x","x [n] [addr]:print n * 4 Bytes datas from addr(hex) in pmem",cmd_x}, 
   { "p","p [exp]:calculate the value of [exp] and print it",cmd_p},
+  { "test","it read from file \"input\" to test the accuracy of calculation function of nemu",cmd_test},
 
   /* TODO: Add more commands */
 
@@ -147,6 +149,48 @@ static int cmd_x(char *args){
   int res = expr(args, &flag);
   printf("the value is %d\n",res);
   return 0; 
+}
+
+static int cmd_test(char *args){
+  FILE *input_file = fopen("../../../tools/gen-expr/input", "r");
+    if (input_file == NULL) {
+        perror("Error opening input file");
+        return 1;
+    }
+
+    char record[1024];
+    int real_val;
+    char buf[1024];
+
+    // 循环读取每一条记录
+    for (int i = 0; i < 100; i++) {
+        // 读取一行记录
+        if (fgets(record, sizeof(record), input_file) == NULL) {
+            perror("Error reading input file");
+            break;
+        }
+
+        // 分割记录，获取数字和表达式
+        char *token = strtok(record, " ");
+        if (token == NULL) {
+            printf("Invalid record format\n");
+            continue;
+        }
+        real_val = atoi(token); // 将数字部分转换为整数
+
+        // 处理表达式部分，可能跨越多行
+        strcpy(buf, ""); // 清空buf
+        while ((token = strtok(NULL, "\n")) != NULL) {
+            strcat(buf, token);
+            strcat(buf, " "); // 拼接换行后的部分，注意添加空格以分隔多行内容
+        }
+
+        // 输出结果
+        printf("Real Value: %d, Expression: %s\n", real_val, buf);
+    }
+
+    fclose(input_file);
+    return 0;
 }
 
 void sdb_set_batch_mode() {
