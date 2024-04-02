@@ -245,6 +245,7 @@ static bool make_token(char *e) {
 }
 
 uint32_t eval(int p,int q){
+  printf("p = %d,q = %d",p,q);
   if(p > q){
     printf("%d %d\n",p,q);
     assert(0);
