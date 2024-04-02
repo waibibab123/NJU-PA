@@ -33,7 +33,7 @@ static char *code_format =
 
 int index_buf = 0;
 int choose(int n){
-  int flag = rand() % 3;
+  int  flag = rand() % 3;
  // printf("index = %d,flag = %d.\n",index_buf,flag);
   return flag;
 }
@@ -81,7 +81,9 @@ static void gen_rand_expr(){
     index_buf = 0;}
   
   switch(choose(3)){
-    case 0:
+    case 0: 
+      gen_num();
+      gen_rand_op();
       gen_num();
       break;
     case 1:
