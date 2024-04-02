@@ -98,7 +98,24 @@ static void gen_rand_expr(){
 }
 
 
+int isFileEmpty(FILE *file) {
+    if (file == NULL) {
+        perror("Error opening file");
+        return -1; // 返回 -1 表示文件打开失败
+    }
 
+    // 尝试读取文件的第一个字符
+    int c = fgetc(file);
+    if (c == EOF) {
+        // 文件为空，关闭文件并返回 1
+        fclose(file);
+        return 1;
+    } else {
+        // 文件不为空，关闭文件并返回 0
+        fclose(file);
+        return 0;
+    }
+}
 
 int main(int argc, char *argv[]) {
   int seed = time(0);
@@ -117,10 +134,13 @@ int main(int argc, char *argv[]) {
     assert(fp != NULL);
     fputs(code_buf, fp);
     fclose(fp);
+    FILE *fp1 = fopen("/tmp/.err_message","w");
+    assert(fp1 != NULL);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
-    if (ret != 0){index_buf = 0;i--; continue;}
-
+    int ret = system("gcc /tmp/.code.c -o /tmp/.expr 2>/tmp/.err_message");
+    int is_empty = isFileEmpty(fp1);
+    if (ret != 0 || is_empty != 1){index_buf = 0;i--; continue;}
+    
     fp = popen("/tmp/.expr", "r");
     assert(fp != NULL);
 
