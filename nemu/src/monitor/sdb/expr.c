@@ -433,6 +433,7 @@ word_t expr(char *e, bool *success) {
   //true cal
   uint32_t res = 0;
   res = eval(0,tokens_len - 1);
+  printf("\n%d",tokens_len - 1);
   memset(tokens, 0 ,sizeof tokens);
   
   return res; 
