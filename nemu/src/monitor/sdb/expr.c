@@ -316,7 +316,7 @@ uint32_t eval(int p,int q){
       case '/':
         if(val2 == 0){
           printf("%d\n",val1);
-        //  assert(0);
+          assert(0);
           return 0;
         }
       case 4:
