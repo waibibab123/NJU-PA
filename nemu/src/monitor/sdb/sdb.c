@@ -160,7 +160,7 @@ static int cmd_test(char *args){
     }
 
     char record[1024];
-    int real_val;
+    unsigned real_val;
     char buf[1024];
 
     // 循环读取每一条记录
@@ -187,9 +187,9 @@ static int cmd_test(char *args){
         }
 
         // 输出结果
-        printf("Real Value: %d, Expression: %s\n", real_val, buf);
+        printf("Real Value: %u, Expression: %s\n", real_val, buf);
         bool flag = false;
-        int res = expr(buf,&flag);
+        unsigned res = expr(buf,&flag);
         if(res == real_val)right_ans ++;
 
     }
