@@ -345,6 +345,7 @@ uint32_t eval(int p,int q){
           assert(0);
           return 0;
         }
+        return val1 / val2;
       case 4:
         return val1 == val2;
       case 5:
