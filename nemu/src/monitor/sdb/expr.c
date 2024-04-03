@@ -107,26 +107,48 @@ typedef struct token {
 static Token tokens[680] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
-static bool  check_parentheses(int p,int q){
-  if(tokens[p].type != '(' || tokens[q].type != ')')return false;
-  int i = p;
-  int j = q;
-  while(i < j){
-    if(tokens[i].type == '('){
-      if(tokens[j].type == ')')
-      {
-        i ++;
-        j --;
-      }
-//      else if(tokens[j].type == '(')return false;
-      else 
-        j --;
-    }
-    else if(tokens[i].type == ')')return false;
-    else i ++;
+//static bool  check_parentheses(int p,int q){
+//  if(tokens[p].type != '(' || tokens[q].type != ')')return false;
+//  int i = p;
+//  int j = q;
+//  while(i < j){
+//    if(tokens[i].type == '('){
+//      if(tokens[j].type == ')')
+//      {
+//        i ++;
+//        j --;
+//      }
+////      else if(tokens[j].type == '(')return false;
+//      else 
+//        j --;
+//    }
+//    else if(tokens[i].type == ')')return false;
+//    else i ++;
+//  }
+//  return true;
+//}
+
+static int check_parentheses(int p,int q){
+  //return -1:stop calculate
+  //return 0 :no need to remove parentheses
+  //return 1 :need to remove parentheses
+  int cnt = 0;
+  for(int i = p; i < q;i ++)
+  {
+    if(tokens[i].type == '(')cnt ++;
+    else if(tokens[i].type == ')')cnt --;
+    
+    if(cnt < 0)return -1;
   }
-  return true;
+  if(cnt != 0) return -1;
+  if(tokens[p].type != '(' || tokens[q].type != ')')return 0;
+
+  int ret = check_parentheses(p+1,q-1);
+  if(ret == -1)return 0;
+  else if(ret == 0||ret == 1)return 1;
+  return 2;//algorithm_error
 }
+
 
 static int max(int a,int b){
   return a > b?a : b;
@@ -255,11 +277,13 @@ uint32_t eval(int p,int q){
   else if(p == q){
     return atoi(tokens[p].str);
   }
-  else if(check_parentheses(p, q) == true){
-    printf("fuckyou");
+  else if(check_parentheses(p, q) == 1){
+    printf(" remove_parentheses ");
     return eval(p + 1, q - 1);
   }
   else{
+    if(check_parentheses(p,q) == 2)printf("algorithm error\n");
+    else if(check_parentheses(p,q) == -1)assert(0);
     int op = -1;
     int flag = -1 ;
     for(int i = p; i <= q;i ++)
