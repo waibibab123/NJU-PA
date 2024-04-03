@@ -341,7 +341,7 @@ uint32_t eval(int p,int q){
         return val1 * val2;
       case '/':
         if(val2 == 0){
-          printf("%d\n",val1);
+          printf("  val1 = %d p = %d q = %d\n",val1,p,q);
           assert(0);
           return 0;
         }
