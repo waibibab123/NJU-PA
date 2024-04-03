@@ -40,7 +40,7 @@ int choose(int n){
 
 void gen_num(){
   if(index_buf > 655)return;
-  int num = rand() % 100;
+  int num = rand() % 100 + 1;
   int num_size = 0,num_tmp= num;
   while(num_tmp){
   num_tmp /= 10;
