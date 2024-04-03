@@ -112,6 +112,7 @@ int main(int argc, char *argv[]) {
     index_buf = 0;
     gen_rand_expr();
     buf[index_buf] = '\0';
+    long size = 0;
     sprintf(code_buf, code_format, buf);
 
     FILE *fp = fopen("/tmp/.code.c", "w");
@@ -124,8 +125,12 @@ int main(int argc, char *argv[]) {
 
     int ret = system("gcc /tmp/.code.c -o /tmp/.expr 2>/tmp/.err_message");
     
+    fseek(fp_err, 0, SEEK_END);
+
+    // 获取文件大小
+    size = ftell(fp_err);
     fclose(fp_err);
-    if (ret != 0 ){index_buf = 0;i--; continue;}
+    if (ret != 0 ||size != 0){index_buf = 0; i--; continue;}
     
     fp = popen("/tmp/.expr", "r");
     assert(fp != NULL);
