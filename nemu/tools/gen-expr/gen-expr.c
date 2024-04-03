@@ -99,26 +99,6 @@ static void gen_rand_expr(){
 }
 
 
-int isFileEmpty(FILE *file) {
-    if (file == NULL) {
-        perror("Error opening file");
-        return -1; // 返回 -1 表示文件打开失败
-    }
-
-    // 尝试读取文件的第一个字符
-    int c = fgetc(file);
-    if (c == EOF) {
-        // 文件为空，关闭文件并返回 1
-      //  printf("empty\n");
-        fclose(file);
-        return 1;
-    } else {
-        // 文件不为空，关闭文件并返回 0
-     //   printf("not empty\n");
-        fclose(file);
-        return 0;
-    }
-}
 
 int main(int argc, char *argv[]) {
   int seed = time(0);
@@ -129,6 +109,7 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
+    index_buf = 0;
     gen_rand_expr();
     buf[index_buf] = '\0';
     sprintf(code_buf, code_format, buf);
@@ -137,13 +118,14 @@ int main(int argc, char *argv[]) {
     assert(fp != NULL);
     fputs(code_buf, fp);
     fclose(fp);
-    FILE *fp1 = fopen("/tmp/.err_message","w");
-    assert(fp1 != NULL);
+    
+    FILE *fp_err = fopen("/tmp/.err_message","w");
+    assert(fp_err != NULL);
 
     int ret = system("gcc /tmp/.code.c -o /tmp/.expr 2>/tmp/.err_message");
     
-    int is_empty = isFileEmpty(fp1);
-    if (ret != 0 || is_empty != 1){index_buf = 0;i--; continue;}
+    fclose(fp_err);
+    if (ret != 0 ){index_buf = 0;i--; continue;}
     
     fp = popen("/tmp/.expr", "r");
     assert(fp != NULL);
