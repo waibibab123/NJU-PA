@@ -146,8 +146,8 @@ static int cmd_x(char *args){
     return 0;
   }
   bool flag = false;
-  uint32_t res = expr(args, &flag);
-  printf("the value is %u\n",res);
+  int res = expr(args, &flag);
+  printf("the value is %d\n",res);
   return 0; 
 }
 
