@@ -267,7 +267,7 @@ static bool make_token(char *e) {
   return true;
 }
 
-uint32_t eval(int p,int q){
+int eval(int p,int q){
   printf("p = %d,q = %d",p,q);
   if(p > q){
     printf("%d %d\n",p,q);
@@ -330,8 +330,8 @@ uint32_t eval(int p,int q){
     }
     int op_type = tokens[op].type;
     printf("%c",op_type);
-    uint32_t val1 = eval(p, op - 1);
-    uint32_t val2 = eval(op + 1, q);
+    int val1 = eval(p, op - 1);
+    int val2 = eval(op + 1, q);
     switch (op_type){
       case '+':
         return val1 + val2;
