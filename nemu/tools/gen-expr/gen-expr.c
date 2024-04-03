@@ -109,10 +109,12 @@ int isFileEmpty(FILE *file) {
     int c = fgetc(file);
     if (c == EOF) {
         // 文件为空，关闭文件并返回 1
+      //  printf("empty\n");
         fclose(file);
         return 1;
     } else {
         // 文件不为空，关闭文件并返回 0
+     //   printf("not empty\n");
         fclose(file);
         return 0;
     }
@@ -139,13 +141,14 @@ int main(int argc, char *argv[]) {
     assert(fp1 != NULL);
 
     int ret = system("gcc /tmp/.code.c -o /tmp/.expr 2>/tmp/.err_message");
+    
     int is_empty = isFileEmpty(fp1);
     if (ret != 0 || is_empty != 1){index_buf = 0;i--; continue;}
     
     fp = popen("/tmp/.expr", "r");
     assert(fp != NULL);
 
-    int result;
+    uint32_t result;
     ret = fscanf(fp, "%u", &result);
     pclose(fp);
 
