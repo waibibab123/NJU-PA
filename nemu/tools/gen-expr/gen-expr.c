@@ -83,8 +83,7 @@ static void gen_rand_expr(){
   switch(choose(3)){
     case 0: 
       gen_num();
-      gen_rand_op();
-      gen_num();
+
       break;
     case 1:
       gen('(');
