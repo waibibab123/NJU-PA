@@ -323,12 +323,8 @@ uint32_t eval(int p,int q){
         flag = 2;
         op = max(op,i);
       }
-      if(flag<=1 && tokens[i].type == '*' ){
+      if(flag<=1 && (tokens[i].type == '*' || tokens[i].type == '/') ){
         flag =1;
-        op = max(op,i);
-      }
-      if(flag<=0 && tokens[i].type == '/' ){
-        flag = 0;
         op = max(op,i);
       }
     }
