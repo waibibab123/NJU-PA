@@ -133,7 +133,7 @@ static int check_parentheses(int p,int q){
   //return 0 :no need to remove parentheses
   //return 1 :need to remove parentheses
   int cnt = 0;
-  for(int i = p; i < q;i ++)
+  for(int i = p; i <= q;i ++)
   {
     if(tokens[i].type == '(')cnt ++;
     else if(tokens[i].type == ')')cnt --;
