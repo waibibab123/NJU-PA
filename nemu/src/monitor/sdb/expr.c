@@ -451,6 +451,40 @@ word_t expr(char *e, bool *success) {
       }
     }
   }
+  //init jie yin yong 
+for(int i = 0 ; i < tokens_len ; i ++)
+{
+  if((tokens[i].type == '*' && i > 0 && tokens[i-1].type !=NUM && tokens[i-1].type != HEX &&tokens[i-1].type != REGISTER
+  && tokens[i+1].type == NUM
+  ) ||(tokens[i].type == '*' && i > 0 && tokens[i-1].type != NUM && tokens[i-1].type != HEX && tokens[i-1].type != REGISTER
+  && tokens[i+1].type == HEX) || (tokens[i].type == '*' && i == 0))
+  {
+    tokens[i].type = TK_NOTYPE;
+    int temp;
+    if(tokens[i+1].type == NUM)
+    {
+      sscanf(tokens[i+1].str,"%d",&temp);
+    }
+    else 
+    {
+      sscanf(tokens[i+1].str,"%x",&temp);
+    }
+    uintptr_t a = (uintptr_t)temp;
+    int value = *((int*)a);
+    sprintf(tokens[i+1].str,"%d",value);
+    for(int j = 0;j < tokens_len; j ++)
+    {
+      if(tokens[j].type == TK_NOTYPE)
+      {
+        for(int k = j + 1; k < tokens_len ;k ++)
+        {
+          tokens[k - 1] = tokens[k];
+        }
+      }
+    }
+    }
+ }
+
   //true cal
   printf("\n%d",tokens_len - 1);
   uint32_t res = 0;
