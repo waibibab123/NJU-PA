@@ -19,12 +19,43 @@
 #include <readline/history.h>
 #include "sdb.h"
 #include <memory/paddr.h>
+#include "/home/dmz/ics2023/nemu/src/monitor/sdb/watchpoint.h"
 
 static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
 
+void sdb_watchpoint_display(){
+  bool flag=true;
+  for(int i=0;i<NR_WP;i++){
+    if(wp_pool[i].flag){
+      printf("Watchpoint.No:%d,expr=\"%s\",old_value=%d,new_value=%d\n",wp_pool[i].NO,wp_pool[i].expr,wp_pool[i].old_value,wp_pool[i].new_value);
+      flag=false;
+    }
+  }
+  if(flag)printf("No watchpoint now.\n");
+}
+
+void create_watchpoint(char *args){
+  WP *p=new_wp();
+  strcpy(p->expr,args);
+  bool success=false;
+  int tmp=expr(p->expr,&success);
+  if(success)p->old_value=tmp;
+  else printf("there is a problem when computing expr");
+  printf("Create watchpoint No.%d success.\n",p->NO);
+}
+
+void delete_watchpoint(int no){
+  for(int i=0;i<NR_WP;i++)
+  {
+    if(wp_pool[i].NO == no){
+      free_wp(&wp_pool[i]);
+      return ;
+    }
+  }
+}
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
   static char *line_read = NULL;
@@ -60,6 +91,8 @@ static int cmd_info(char *args);
 static int cmd_x(char *args);
 static int cmd_p(char *args);
 static int cmd_test(char *args);
+static int cmd_d(char *args);
+static int cmd_w(char *args);
 
 static struct {
   const char *name;
@@ -74,6 +107,8 @@ static struct {
   { "x","x [n] [addr]:print n * 4 Bytes datas from addr(hex) in pmem",cmd_x}, 
   { "p","p [exp]:calculate the value of [exp] and print it",cmd_p},
   { "test","it read from file \"input\" to test the accuracy of calculation function of nemu",cmd_test},
+  { "d","delete a watchpoint whose number is given",cmd_d},
+  { "w","create a watchpoint whose expression is given",cmd_w},
 
   /* TODO: Add more commands */
 
@@ -119,8 +154,8 @@ static int cmd_info(char *args){
     printf("please print args\n");
   else if(strcmp(args, "r") == 0)
     isa_reg_display();
-// else if(strcmp(args, "w") == 0)
-//   sdb_watchpoint_display();
+  else if(strcmp(args, "w") == 0)
+    sdb_watchpoint_display();
   return 0;
 }
 
@@ -149,6 +184,20 @@ static int cmd_x(char *args){
   uint32_t  res = expr(args, &flag);
   printf("the value is %u\n",res);
   return 0; 
+}
+
+static int cmd_d(char *args){
+  if(args==NULL)
+    printf("No args.\n");
+  else
+    delete_watchpoint(atoi(args));
+
+  return 0;
+}
+
+static int cmd_w(char *args){
+  create_watchpoint(args);
+  return 0;
 }
 
 static int cmd_test(char *args){
