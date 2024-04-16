@@ -491,6 +491,6 @@ for(int i = 0 ; i < tokens_len ; i ++)
   res = eval(0,tokens_len - 1);
  
   memset(tokens, 0 ,sizeof tokens);
-  
+  *success=true;  
   return res; 
 }
